@@ -1,7 +1,5 @@
 package ru.mycompany.test202001.domain;
 
-import org.springframework.data.annotation.Id;
-
 import javax.persistence.*;
 
 /**
