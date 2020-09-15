@@ -1,6 +1,7 @@
 package ru.mycompany.test202001.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Eugene Chernov
@@ -13,15 +14,15 @@ public class Tax {
     @Id
     @AttributeOverrides({
             @AttributeOverride(name = "a",
-                    column = @Column(name="A")),
+                    column = @Column(name = "A")),
             @AttributeOverride(name = "b",
-                    column = @Column(name="B")),
+                    column = @Column(name = "B")),
             @AttributeOverride(name = "c",
-                    column = @Column(name="C")),
+                    column = @Column(name = "C")),
             @AttributeOverride(name = "d",
-                    column = @Column(name="D")),
+                    column = @Column(name = "D")),
             @AttributeOverride(name = "y",
-                    column = @Column(name="Y"))
+                    column = @Column(name = "Y"))
     })
     private String a;
     private String b;
@@ -34,8 +35,27 @@ public class Tax {
     public Tax() {
     }
 
+    public Tax(@NotNull TaxId id, String v) {
+        this.a = id.getA();
+        this.b = id.getB();
+        this.c = id.getC();
+        this.d = id.getD();
+        this.y = id.getY();
+        this.v = v;
+    }
+
+    public Tax(@NotNull TaxGroup group, @NotNull TaxLocation location,
+               String y, String v) {
+        this.a = group.getA();
+        this.b = group.getB();
+        this.c = location.getC();
+        this.d = location.getD();
+        this.y = y;
+        this.v = v;
+    }
+
     public Tax(String a, String b, String c,
-                 String d, String y, String v) {
+               String d, String y, String v) {
         this.a = a;
         this.b = b;
         this.c = c;

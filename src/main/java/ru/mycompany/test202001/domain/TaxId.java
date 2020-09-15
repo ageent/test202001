@@ -1,7 +1,9 @@
 package ru.mycompany.test202001.domain;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author Eugene Chernov
@@ -18,6 +20,14 @@ public class TaxId implements Serializable {
     private String y;
 
     public TaxId() {
+    }
+
+    public TaxId(@NotNull TaxGroup group, @NotNull TaxLocation location, String y) {
+        this.a = group.getA();
+        this.b = group.getB();
+        this.c = location.getC();
+        this.d = location.getD();
+        this.y = y;
     }
 
     public TaxId(String a, String b, String c, String d, String y) {
@@ -77,5 +87,29 @@ public class TaxId implements Serializable {
                 ", d='" + d + '\'' +
                 ", y='" + y + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TaxId)) return false;
+
+        TaxId taxId = (TaxId) o;
+
+        if (!Objects.equals(a, taxId.a)) return false;
+        if (!Objects.equals(b, taxId.b)) return false;
+        if (!Objects.equals(c, taxId.c)) return false;
+        if (!Objects.equals(d, taxId.d)) return false;
+        return Objects.equals(y, taxId.y);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = a != null ? a.hashCode() : 0;
+        result = 31 * result + (b != null ? b.hashCode() : 0);
+        result = 31 * result + (c != null ? c.hashCode() : 0);
+        result = 31 * result + (d != null ? d.hashCode() : 0);
+        result = 31 * result + (y != null ? y.hashCode() : 0);
+        return result;
     }
 }
