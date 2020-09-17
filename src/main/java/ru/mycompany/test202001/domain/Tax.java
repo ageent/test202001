@@ -2,6 +2,7 @@ package ru.mycompany.test202001.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
  * @author Eugene Chernov
@@ -28,14 +29,14 @@ public class Tax {
     private String b;
     private String c;
     private String d;
-    private String y;
+    private int y;
 
-    private String v;
+    private long v;
 
     public Tax() {
     }
 
-    public Tax(@NotNull TaxId id, String v) {
+    public Tax(@NotNull TaxId id, long v) {
         this.a = id.getA();
         this.b = id.getB();
         this.c = id.getC();
@@ -45,7 +46,7 @@ public class Tax {
     }
 
     public Tax(@NotNull TaxGroup group, @NotNull TaxLocation location,
-               String y, String v) {
+               int y, long v) {
         this.a = group.getA();
         this.b = group.getB();
         this.c = location.getC();
@@ -55,7 +56,7 @@ public class Tax {
     }
 
     public Tax(String a, String b, String c,
-               String d, String y, String v) {
+               String d, int y, long v) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -96,19 +97,19 @@ public class Tax {
         this.d = d;
     }
 
-    public String getY() {
+    public int getY() {
         return y;
     }
 
-    public void setY(String y) {
+    public void setY(int y) {
         this.y = y;
     }
 
-    public String getV() {
+    public long getV() {
         return v;
     }
 
-    public void setV(String v) {
+    public void setV(long v) {
         this.v = v;
     }
 
@@ -122,5 +123,31 @@ public class Tax {
                 ", y='" + y + '\'' +
                 ", v='" + v + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tax)) return false;
+
+        Tax tax = (Tax) o;
+
+        if (y != tax.y) return false;
+        if (v != tax.v) return false;
+        if (!Objects.equals(a, tax.a)) return false;
+        if (!Objects.equals(b, tax.b)) return false;
+        if (!Objects.equals(c, tax.c)) return false;
+        return Objects.equals(d, tax.d);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = a != null ? a.hashCode() : 0;
+        result = 31 * result + (b != null ? b.hashCode() : 0);
+        result = 31 * result + (c != null ? c.hashCode() : 0);
+        result = 31 * result + (d != null ? d.hashCode() : 0);
+        result = 31 * result + y;
+        result = 31 * result + (int) (v ^ (v >>> 32));
+        return result;
     }
 }

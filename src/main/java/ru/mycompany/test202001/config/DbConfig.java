@@ -37,7 +37,7 @@ public class DbConfig {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean customEntityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
         em.setPackagesToScan("ru.mycompany.test202001.domain");

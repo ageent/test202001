@@ -1,4 +1,4 @@
-package ru.mycompany.test202001.Dto;
+package ru.mycompany.test202001.dto;
 
 import ru.mycompany.test202001.domain.Tax;
 import ru.mycompany.test202001.domain.TaxGroup;
@@ -10,91 +10,23 @@ import javax.validation.constraints.NotNull;
 /**
  * @author Eugene Chernov
  */
-public class TaxDto {
-    private String a = "NONE";
-    private String b = "NONE";
-    private String c = "NONE";
-    private String d = "NONE";
-    private String y = "NONE";
-    private String v;
+public class TaxDto extends Tax{
 
     public TaxDto() {
+        super("NONE", "NONE", "NONE", "NONE", -1, 0);
     }
 
-    public TaxDto(@NotNull TaxId id, String v) {
-        this.a = id.getA();
-        this.b = id.getB();
-        this.c = id.getC();
-        this.d = id.getD();
-        this.y = id.getY();
-        this.v = v;
+    public TaxDto(@NotNull TaxId id, long v) {
+        super(id, v);
     }
 
     public TaxDto(@NotNull TaxGroup group, @NotNull TaxLocation location,
-               String y, String v) {
-        this.a = group.getA();
-        this.b = group.getB();
-        this.c = location.getC();
-        this.d = location.getD();
-        this.y = y;
-        this.v = v;
+                  int y, long v) {
+        super(group, location, y, v);
     }
 
-    public TaxDto(String a, String b, String c, String d, String y, String v) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
-        this.y = y;
-        this.v = v;
-    }
-
-    public String getA() {
-        return a;
-    }
-
-    public void setA(String a) {
-        this.a = a;
-    }
-
-    public String getB() {
-        return b;
-    }
-
-    public void setB(String b) {
-        this.b = b;
-    }
-
-    public String getC() {
-        return c;
-    }
-
-    public void setC(String c) {
-        this.c = c;
-    }
-
-    public String getD() {
-        return d;
-    }
-
-    public void setD(String d) {
-        this.d = d;
-    }
-
-    public String getY() {
-        return y;
-    }
-
-    public void setY(String y) {
-        this.y = y;
-    }
-
-    public String getV() {
-        return v;
-    }
-
-    public void setV(String v) {
-        this.v = v;
+    public TaxDto(String a, String b, String c, String d, int y, long v) {
+        super(a, b, c, d, y, v);
     }
 
     public static Tax toDomainObject(@NotNull TaxDto dto) {

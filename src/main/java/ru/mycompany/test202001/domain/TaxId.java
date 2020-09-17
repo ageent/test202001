@@ -17,12 +17,13 @@ public class TaxId implements Serializable {
     private String b;
     private String c;
     private String d;
-    private String y;
+    private int y;
 
     public TaxId() {
     }
 
-    public TaxId(@NotNull TaxGroup group, @NotNull TaxLocation location, String y) {
+    public TaxId(@NotNull TaxGroup group, @NotNull TaxLocation location,
+                 int y) {
         this.a = group.getA();
         this.b = group.getB();
         this.c = location.getC();
@@ -30,7 +31,7 @@ public class TaxId implements Serializable {
         this.y = y;
     }
 
-    public TaxId(String a, String b, String c, String d, String y) {
+    public TaxId(String a, String b, String c, String d, int y) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -70,11 +71,11 @@ public class TaxId implements Serializable {
         this.d = d;
     }
 
-    public String getY() {
+    public int getY() {
         return y;
     }
 
-    public void setY(String y) {
+    public void setY(int y) {
         this.y = y;
     }
 
@@ -96,11 +97,11 @@ public class TaxId implements Serializable {
 
         TaxId taxId = (TaxId) o;
 
+        if (y != taxId.y) return false;
         if (!Objects.equals(a, taxId.a)) return false;
         if (!Objects.equals(b, taxId.b)) return false;
         if (!Objects.equals(c, taxId.c)) return false;
-        if (!Objects.equals(d, taxId.d)) return false;
-        return Objects.equals(y, taxId.y);
+        return Objects.equals(d, taxId.d);
     }
 
     @Override
@@ -109,7 +110,7 @@ public class TaxId implements Serializable {
         result = 31 * result + (b != null ? b.hashCode() : 0);
         result = 31 * result + (c != null ? c.hashCode() : 0);
         result = 31 * result + (d != null ? d.hashCode() : 0);
-        result = 31 * result + (y != null ? y.hashCode() : 0);
+        result = 31 * result + y;
         return result;
     }
 }
