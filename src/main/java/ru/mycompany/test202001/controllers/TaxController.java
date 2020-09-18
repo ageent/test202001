@@ -2,8 +2,11 @@ package ru.mycompany.test202001.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.mycompany.test202001.domain.Tax;
+import ru.mycompany.test202001.dto.ElementTaxPivotTable;
+import ru.mycompany.test202001.dto.TaxDto;
 import ru.mycompany.test202001.repositories.TaxRepository;
 
 import java.util.List;
@@ -22,9 +25,13 @@ public class TaxController {
     }
 
     @GetMapping("/")
-    public String getPivotTable(String row, String col) {
-        List<Tax> taxes = repository.findAll();
-        System.out.println(taxes);
-        return taxes.toString();
+    public ElementTaxPivotTable getPivotTable(
+            @RequestParam("row") String row,
+            @RequestParam("col") String col
+    ) {
+        if (row.equals(col)) {
+//            TODO: columns
+        }
+
     }
 }
