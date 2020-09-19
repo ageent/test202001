@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 public class TaxDto extends Tax{
 
-    public TaxDto() {
+    /*public TaxDto() {
         super("NONE", "NONE", "NONE", "NONE", -1, 0);
     }
 
@@ -36,5 +36,5 @@ public class TaxDto extends Tax{
     public static TaxDto toDto(@NotNull Tax record) {
         return new TaxDto(record.getA(), record.getB(), record.getC(),
                 record.getD(), record.getY(), record.getV());
-    }
+    }*/
 }

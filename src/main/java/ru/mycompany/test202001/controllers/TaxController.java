@@ -25,13 +25,11 @@ public class TaxController {
     }
 
     @GetMapping("/")
-    public ElementTaxPivotTable getPivotTable(
-            @RequestParam("row") String row,
+    public List<String> getPivotTable(
+//            @RequestParam("row") String row,
             @RequestParam("col") String col
     ) {
-        if (row.equals(col)) {
-//            TODO: columns
-        }
-
+        List<String> uniqueColumns = repository.findUniqueValuesOfField(col);
+        return uniqueColumns;
     }
 }

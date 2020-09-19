@@ -5,43 +5,43 @@ import java.util.Objects;
 /**
  * @author Eugene Chernov
  */
-public class ElementTaxPivotTable<C, R, V extends Number> {
-        private C col;
-        private R row;
-        private V val;
+public class ElementTaxPivotTable {
+        private String row;
+        private String col;
+        private long val;
 
-        public ElementTaxPivotTable(C col, R row, V val) {
-                this.col = col;
+        public ElementTaxPivotTable(String col, String row, long val) {
                 this.row = row;
+                this.col = col;
                 this.val = val;
         }
 
-        public C getCol() {
+        public String getCol() {
                 return col;
         }
 
-        public void setCol(C col) {
+        public void setCol(String col) {
                 this.col = col;
         }
 
-        public R getRow() {
+        public String getRow() {
                 return row;
         }
 
-        public void setRow(R row) {
+        public void setRow(String row) {
                 this.row = row;
         }
 
-        public V getVal() {
+        public long getVal() {
                 return val;
         }
 
-        public void setVal(V val) {
+        public void setVal(long val) {
                 this.val = val;
         }
 
         @Override
-        public String toString() {
+        public java.lang.String toString() {
                 return "ElementTaxPivotTable{" +
                         "col=" + col +
                         ", row=" + row +
@@ -54,18 +54,18 @@ public class ElementTaxPivotTable<C, R, V extends Number> {
                 if (this == o) return true;
                 if (!(o instanceof ElementTaxPivotTable)) return false;
 
-                ElementTaxPivotTable<?, ?, ?> that = (ElementTaxPivotTable<?, ?, ?>) o;
+                ElementTaxPivotTable that = (ElementTaxPivotTable) o;
 
-                if (!Objects.equals(col, that.col)) return false;
+                if (val != that.val) return false;
                 if (!Objects.equals(row, that.row)) return false;
-                return Objects.equals(val, that.val);
+                return Objects.equals(col, that.col);
         }
 
         @Override
         public int hashCode() {
-                int result = col != null ? col.hashCode() : 0;
-                result = 31 * result + (row != null ? row.hashCode() : 0);
-                result = 31 * result + (val != null ? val.hashCode() : 0);
+                int result = row != null ? row.hashCode() : 0;
+                result = 31 * result + (col != null ? col.hashCode() : 0);
+                result = 31 * result + (int) (val ^ (val >>> 32));
                 return result;
         }
 }
