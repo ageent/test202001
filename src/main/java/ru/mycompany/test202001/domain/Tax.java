@@ -36,7 +36,7 @@ public class Tax {
     public Tax() {
     }
 
-    /*public Tax(@NotNull TaxId id, long v) {
+    public Tax(@NotNull TaxId id, long v) {
         this.a = id.getA();
         this.b = id.getB();
         this.c = id.getC();
@@ -46,14 +46,14 @@ public class Tax {
     }
 
     public Tax(@NotNull TaxGroup group, @NotNull TaxLocation location,
-               int y, long v) {
+               String y, long v) {
         this.a = group.getA();
         this.b = group.getB();
         this.c = location.getC();
         this.d = location.getD();
         this.y = y;
         this.v = v;
-    }*/
+    }
 
     public Tax(String a, String b, String c,
                String d, String y, long v) {
@@ -132,11 +132,11 @@ public class Tax {
 
         Tax tax = (Tax) o;
 
-//        if (y != tax.y) return false;
         if (v != tax.v) return false;
         if (!Objects.equals(a, tax.a)) return false;
         if (!Objects.equals(b, tax.b)) return false;
         if (!Objects.equals(c, tax.c)) return false;
+        if (!Objects.equals(y, tax.y)) return false;
         return Objects.equals(d, tax.d);
     }
 
@@ -146,7 +146,7 @@ public class Tax {
         result = 31 * result + (b != null ? b.hashCode() : 0);
         result = 31 * result + (c != null ? c.hashCode() : 0);
         result = 31 * result + (d != null ? d.hashCode() : 0);
-//        result = 31 * result + y;
+        result = 31 * result + (y != null ? y.hashCode() : 0);
         result = 31 * result + (int) (v ^ (v >>> 32));
         return result;
     }

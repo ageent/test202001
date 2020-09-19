@@ -12,8 +12,8 @@ import javax.validation.constraints.NotNull;
  */
 public class TaxDto extends Tax{
 
-    /*public TaxDto() {
-        super("NONE", "NONE", "NONE", "NONE", -1, 0);
+    public TaxDto() {
+        super("NONE", "NONE", "NONE", "NONE", "NONE", 0);
     }
 
     public TaxDto(@NotNull TaxId id, long v) {
@@ -21,11 +21,11 @@ public class TaxDto extends Tax{
     }
 
     public TaxDto(@NotNull TaxGroup group, @NotNull TaxLocation location,
-                  int y, long v) {
+                  String y, long v) {
         super(group, location, y, v);
     }
 
-    public TaxDto(String a, String b, String c, String d, int y, long v) {
+    public TaxDto(String a, String b, String c, String d, String y, long v) {
         super(a, b, c, d, y, v);
     }
 
@@ -36,5 +36,5 @@ public class TaxDto extends Tax{
     public static TaxDto toDto(@NotNull Tax record) {
         return new TaxDto(record.getA(), record.getB(), record.getC(),
                 record.getD(), record.getY(), record.getV());
-    }*/
+    }
 }
