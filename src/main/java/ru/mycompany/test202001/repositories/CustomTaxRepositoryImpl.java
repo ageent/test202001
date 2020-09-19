@@ -23,15 +23,9 @@ public class CustomTaxRepositoryImpl implements CustomTaxRepository {
 
     @Override
     public List<String> findUniqueValuesOfField(String fieldName) {
-        TypedQuery<String> query = entityManager.createQuery(
-                "select :fieldName from Tax group by :fieldName",
-                String.class
-        );
-        query.setParameter("fieldName", fieldName);
-        /*TypedQuery<String> query = entityManager.createQuery(
-                "select a from Tax group by a",
-                String.class
-        );*/
+        final String strQuery = "select " + fieldName
+                + " from Tax group by " + fieldName;
+        TypedQuery<String> query = entityManager.createQuery(strQuery, String.class);
         return query.getResultList();
     }
 }
