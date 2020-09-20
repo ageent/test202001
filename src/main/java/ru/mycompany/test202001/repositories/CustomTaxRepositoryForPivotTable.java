@@ -7,9 +7,8 @@ import ru.mycompany.test202001.dto.ElementTaxPivotTable;
 /**
  * @author Eugene Chernov
  */
-public interface CustomTaxRepository {
+public interface CustomTaxRepositoryForPivotTable {
     List<String> findUniqueValuesOfField(String fieldName);
 
-    List<ElementTaxPivotTable> getPivotTable(String rowsFieldName, String columnsFieldName,
-                                             List<String> columnsNames);
+    List<ElementTaxPivotTable> getPivotTable(String rowsFieldName, String columnsFieldName);
 }

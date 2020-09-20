@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.mycompany.test202001.domain.Tax;
+import ru.mycompany.test202001.repositories.CustomTaxRepositoryForPivotTable;
 import ru.mycompany.test202001.dto.ElementTaxPivotTable;
-import ru.mycompany.test202001.dto.TaxDto;
-import ru.mycompany.test202001.repositories.TaxRepository;
 
 import java.util.List;
 
@@ -17,21 +15,20 @@ import java.util.List;
 @RestController
 public class TaxController {
 
-    private final TaxRepository repository;
+    private final CustomTaxRepositoryForPivotTable pivotTableRepository;
 
     @Autowired
-    public TaxController(TaxRepository repository) {
-        this.repository = repository;
+    public TaxController(CustomTaxRepositoryForPivotTable pivotTableRepository) {
+        this.pivotTableRepository = pivotTableRepository;
     }
 
     @GetMapping("/")
-    public List<String> getPivotTable(
-//            @RequestParam("row") String row,
+    public List<ElementTaxPivotTable> getPivotTable(
+            @RequestParam("row") String row,
             @RequestParam("col") String col
     ) {
-        List<String> uniqueColumns = repository.findUniqueValuesOfField(col);
-
-
-        return uniqueColumns;
+        return pivotTableRepository.getPivotTable(row, col);
+//        List<String> uniqueColumns = pivotTableRepository.findUniqueValuesOfField(col);
+//        return uniqueColumns;
     }
 }
