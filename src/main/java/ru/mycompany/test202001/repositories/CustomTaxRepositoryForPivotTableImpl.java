@@ -1,11 +1,13 @@
 package ru.mycompany.test202001.repositories;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import ru.mycompany.test202001.dto.ElementTaxPivotTable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
     private String columnsFieldName = "DefaultName";    // Field name of columns of pivot table
     private List<String> columnsNames = List.of("DefaultColumnName");
     private List<String> rowsNames = List.of("DefaultRowName");
+    private List<ElementTaxPivotTable> pivotTable = new ArrayList<>();
 
     public CustomTaxRepositoryForPivotTableImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -35,44 +38,51 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
     }
 
     @Override
-    public List<ElementTaxPivotTable> getPivotTable(String rowsFieldName, String columnsFieldName) {
-        fillBean(rowsFieldName, columnsFieldName);
-        int pivotTableSize = rowsNames.size() * columnsNames.size();
-        List<ElementTaxPivotTable> pivotTable = new ArrayList<>(pivotTableSize);
-
-        for (String colName : columnsNames) {
-            List<Long> valuesColumn = getPivotTableSumField(colName);
-
-            for (int rowNum = 0; rowNum < rowsNames.size(); rowNum++) {
-                assert valuesColumn != null;
-                long elVal = valuesColumn.get(rowNum);
-                String rowName = rowsNames.get(rowNum);
-                ElementTaxPivotTable elTable =
-                        new ElementTaxPivotTable(colName, rowName, elVal);
-
-                pivotTable.add(elTable);
-            }
+    public void setPivotTable(@NotNull String rowsFieldName,
+                              @Nullable String columnsFieldName) {
+        if (columnsFieldName == null || columnsFieldName.equals(rowsFieldName)) {
+            setPivotTableWithSingleColumn(rowsFieldName);
+            return;
         }
-
-        return pivotTable;
+        setPivotTableWithSeveralColumns(rowsFieldName, columnsFieldName);
     }
 
-    public void fillBean(String rowsFieldName, String columnsFieldName) {
+    /**
+     * Sets all fields and cleans Pivot Table
+     * */
+    public void fillBean(@NotNull String rowsFieldName, @NotNull String columnsFieldName) {
         setRowsFieldName(rowsFieldName);
         setColumnsFieldName(columnsFieldName);
         setRowsNames(findUniqueValuesOfField(rowsFieldName));
         setColumnsNames(findUniqueValuesOfField(columnsFieldName));
+        setPivotTable(new ArrayList<>());
     }
 
-    /*
-    * param columnNumber is column name of pivot table.
-    * */
-    private List<Long> getPivotTableSumField(String columnName) {
-        final String strQuery = "select sum(case when " + columnsFieldName
-                + " = '" + columnName + "' then v end) from Tax group by " + rowsFieldName;
-        TypedQuery<Long> query = entityManager.createQuery(strQuery, Long.class);
+    /**
+     * Sets some fields and cleans Pivot Table
+     * */
+    public void fillBean(@NotNull String rowsFieldName) {
+        setRowsFieldName(rowsFieldName);
+        setColumnsFieldName("DefaultName");
+        setRowsNames(findUniqueValuesOfField(rowsFieldName));
+        setColumnsNames(List.of("DefaultColumnName"));
+        setPivotTable(new ArrayList<>());
+    }
 
-        return query.getResultList();
+    public void setPivotTableWithSingleColumn(@NotNull String rowsFieldName) {
+        fillBean(rowsFieldName);
+
+        addOneColumnToPivotTable(getPivotTableSumField());
+    }
+
+    public void setPivotTableWithSeveralColumns(@NotNull String rowsFieldName,
+                                                @NotNull String columnsFieldName) {
+        fillBean(rowsFieldName, columnsFieldName);
+
+        for (String colName : columnsNames) {
+            List<Long> valuesColumn = getPivotTableSumField(colName);
+            addOneColumnToPivotTable(valuesColumn);
+        }
     }
 
     public String getRowsFieldName() {
@@ -105,5 +115,49 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
 
     public void setRowsNames(List<String> rowsNames) {
         this.rowsNames = rowsNames;
+    }
+
+    @Override
+    public List<ElementTaxPivotTable> getPivotTable() {
+        return pivotTable;
+    }
+
+    public void setPivotTable(List<ElementTaxPivotTable> pivotTable) {
+        this.pivotTable = pivotTable;
+    }
+
+    private void addOneColumnToPivotTable(List<Long> valuesColumn) {
+        String colName = "V";
+
+        for (int rowNum = 0; rowNum < rowsNames.size(); rowNum++) {
+            long elVal = valuesColumn.get(rowNum);
+            String rowName = rowsNames.get(rowNum);
+            ElementTaxPivotTable elTable =
+                    new ElementTaxPivotTable(colName, rowName, elVal);
+
+            pivotTable.add(elTable);
+        }
+    }
+
+    /*
+     * param columnNumber is column name of pivot table.
+     * */
+    private List<Long> getPivotTableSumField(String columnName) {
+        final String strQuery = "select sum(case when " + columnsFieldName
+                + " = '" + columnName + "' then v end) from Tax group by " + rowsFieldName;
+        TypedQuery<Long> query = entityManager.createQuery(strQuery, Long.class);
+
+        List<Long> res = query.getResultList();
+        assert res.size() == rowsNames.size();
+        return res;
+    }
+
+    private List<Long> getPivotTableSumField() {
+        final String strQuery = "select sum(v) from Tax group by " + rowsFieldName;
+        TypedQuery<Long> query = entityManager.createQuery(strQuery, Long.class);
+
+        List<Long> res = query.getResultList();
+        assert res.size() == rowsNames.size();
+        return res;
     }
 }

@@ -10,5 +10,7 @@ import ru.mycompany.test202001.dto.ElementTaxPivotTable;
 public interface CustomTaxRepositoryForPivotTable {
     List<String> findUniqueValuesOfField(String fieldName);
 
-    List<ElementTaxPivotTable> getPivotTable(String rowsFieldName, String columnsFieldName);
+    void setPivotTable(String rowsFieldName, String columnsFieldName);
+
+    List<ElementTaxPivotTable> getPivotTable();
 }
