@@ -30,6 +30,8 @@ public class TaxController {
             @RequestParam("col") String col
     ) {
         List<String> uniqueColumns = repository.findUniqueValuesOfField(col);
+
+
         return uniqueColumns;
     }
 }
