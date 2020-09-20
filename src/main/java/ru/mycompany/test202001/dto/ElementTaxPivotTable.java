@@ -8,9 +8,9 @@ import java.util.Objects;
 public class ElementTaxPivotTable {
         private String row;
         private String col;
-        private long val;
+        private Long val;
 
-        public ElementTaxPivotTable(String col, String row, long val) {
+        public ElementTaxPivotTable(String col, String row, Long val) {
                 this.row = row;
                 this.col = col;
                 this.val = val;
@@ -32,11 +32,11 @@ public class ElementTaxPivotTable {
                 this.row = row;
         }
 
-        public long getVal() {
+        public Long getVal() {
                 return val;
         }
 
-        public void setVal(long val) {
+        public void setVal(Long val) {
                 this.val = val;
         }
 
@@ -56,16 +56,16 @@ public class ElementTaxPivotTable {
 
                 ElementTaxPivotTable that = (ElementTaxPivotTable) o;
 
-                if (val != that.val) return false;
                 if (!Objects.equals(row, that.row)) return false;
-                return Objects.equals(col, that.col);
+                if (!Objects.equals(col, that.col)) return false;
+                return Objects.equals(val, that.val);
         }
 
         @Override
         public int hashCode() {
                 int result = row != null ? row.hashCode() : 0;
                 result = 31 * result + (col != null ? col.hashCode() : 0);
-                result = 31 * result + (int) (val ^ (val >>> 32));
+                result = 31 * result + (val != null ? val.hashCode() : 0);
                 return result;
         }
 }

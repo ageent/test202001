@@ -6,6 +6,7 @@ import ru.mycompany.test202001.dto.ElementTaxPivotTable;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,8 +17,8 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
 
     @PersistenceContext
     private EntityManager entityManager;
-    private String rowsFieldName = "DefaultName";
-    private String columnsFieldName = "DefaultName";
+    private String rowsFieldName = "DefaultName";       // Field name of rows of pivot table
+    private String columnsFieldName = "DefaultName";    // Field name of columns of pivot table
     private List<String> columnsNames = List.of("DefaultColumnName");
     private List<String> rowsNames = List.of("DefaultRowName");
 
@@ -37,14 +38,25 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
 
     @Override
     public List<ElementTaxPivotTable> getPivotTable(String rowsFieldName, String columnsFieldName) {
-//        final String strQuery =
-//                buildStrQueryToGetPivotTable(rowsFieldName, columnsFieldName, columnsNames);
         fillBean(rowsFieldName, columnsFieldName);
+        int pivotTableSize = rowsNames.size() * columnsNames.size();
+        List<ElementTaxPivotTable> pivotTable = new ArrayList<>(pivotTableSize);
 
+        for (String colName : columnsNames) {
+            List<Long> valuesColumn = getPivotTableSumField(colName);
 
-//        TypedQuery<String> query = entityManager.createQuery(strQuery, String.class);
-//        return query.getResultList();
-        return null;
+            for (int rowNum = 0; rowNum < rowsNames.size(); rowNum++) {
+                assert valuesColumn != null;
+                long elVal = valuesColumn.get(rowNum);
+                String rowName = rowsNames.get(rowNum);
+                ElementTaxPivotTable elTable =
+                        new ElementTaxPivotTable(colName, rowName, elVal);
+
+                pivotTable.add(elTable);
+            }
+        }
+
+        return pivotTable;
     }
 
     public void fillBean(String rowsFieldName, String columnsFieldName) {
@@ -54,44 +66,17 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
         setColumnsNames(findUniqueValuesOfField(columnsFieldName));
     }
 
-    private List<Long> getPivotTableSumField() {
-//        final String strQuery = "select sum(case when " + ;
-//        TypedQuery<Long> query = entityManager.createQuery(strQuery, Long.class);
+    /*
+    * param columnNumber is column name of pivot table.
+    * */
+    private List<Long> getPivotTableSumField(String columnName) {
+//        TODO: remove order by
+        final String strQuery = "select sum(case when " + columnsFieldName
+                + " = '" + columnName + "' then v end) from Tax group by " + rowsFieldName
+                + " order by " + rowsFieldName;
+        TypedQuery<Long> query = entityManager.createQuery(strQuery, Long.class);
 
-        return null;
-    }
-
-    private static String buildStrQueryToGetPivotTable(String rowsFieldName, String columnsFieldName,
-                                                       List<String> columnsNames) {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("select ");
-        builder.append(rowsFieldName);
-        builder.append(", ");
-
-        builder.append("sum(case when ");
-        builder.append(columnsFieldName);
-        builder.append(" = '");
-        builder.append(columnsNames.get(0));
-        builder.append("' then v end)");
-        for (int columnsCount = 1; columnsCount < columnsNames.size(); columnsCount++) {
-            builder.append(", ");
-            builder.append("sum(case when ");
-            builder.append(columnsFieldName);
-            builder.append(" = '");
-            builder.append(columnsNames.get(columnsCount));
-            builder.append("' then v end)");
-        }
-
-//        TODO: remove ORDER BY
-        builder.append(" from Tax");
-        builder.append(" group by ");
-        builder.append(rowsFieldName);
-        builder.append(" order by ");
-        builder.append(rowsFieldName);
-        builder.append(";");
-
-        return builder.toString();
+        return query.getResultList();
     }
 
     public String getRowsFieldName() {
@@ -124,11 +109,5 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
 
     public void setRowsNames(List<String> rowsNames) {
         this.rowsNames = rowsNames;
-    }
-
-    public static void main(String[] args) {
-//        Test method buildStrQueryToGetPivotTable
-        System.out.println(buildStrQueryToGetPivotTable("rowsField",
-                "columnsField", List.of("c1", "c2", "c3")));
     }
 }
