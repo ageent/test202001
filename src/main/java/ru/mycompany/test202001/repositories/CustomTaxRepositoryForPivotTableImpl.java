@@ -28,10 +28,8 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
 
     @Override
     public List<String> findUniqueValuesOfField(String fieldName) {
-//        TODO: remove ORDER BY
         final String strQuery = "select " + fieldName
-                + " from Tax group by " + fieldName
-                + " order by " + fieldName;
+                + " from Tax group by " + fieldName;
         TypedQuery<String> query = entityManager.createQuery(strQuery, String.class);
         return query.getResultList();
     }
@@ -70,10 +68,8 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
     * param columnNumber is column name of pivot table.
     * */
     private List<Long> getPivotTableSumField(String columnName) {
-//        TODO: remove order by
         final String strQuery = "select sum(case when " + columnsFieldName
-                + " = '" + columnName + "' then v end) from Tax group by " + rowsFieldName
-                + " order by " + rowsFieldName;
+                + " = '" + columnName + "' then v end) from Tax group by " + rowsFieldName;
         TypedQuery<Long> query = entityManager.createQuery(strQuery, Long.class);
 
         return query.getResultList();

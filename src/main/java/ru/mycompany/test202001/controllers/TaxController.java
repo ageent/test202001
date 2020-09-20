@@ -28,7 +28,5 @@ public class TaxController {
             @RequestParam("col") String col
     ) {
         return pivotTableRepository.getPivotTable(row, col);
-//        List<String> uniqueColumns = pivotTableRepository.findUniqueValuesOfField(col);
-//        return uniqueColumns;
     }
 }
