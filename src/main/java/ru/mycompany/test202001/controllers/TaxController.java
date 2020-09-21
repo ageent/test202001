@@ -34,9 +34,4 @@ public class TaxController {
         pivotTableRepository.setPivotTable(row, col);
         return pivotTableRepository.getPivotTable();
     }
-
-//    @Mapping("/error")
-//    public
 }
-// TODO: tests
-// TODO: /error
