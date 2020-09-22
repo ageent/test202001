@@ -49,10 +49,8 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
     }
 */
 
-    /**
-     * Sets all fields and cleans Pivot Table
-     * */
-    public void fillBean(@NotNull String rowsFieldName, @NotNull String columnsFieldName) {
+
+    /*public void fillBean(@NotNull String rowsFieldName, @NotNull String columnsFieldName) {
         setRowsFieldName(rowsFieldName);
         setColumnsFieldName(columnsFieldName);
         setRowsNames(findUniqueValuesOfField(rowsFieldName));
@@ -60,16 +58,14 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
         setPivotTable(new ArrayList<>());
     }
 
-    /**
-     * Sets some fields and cleans Pivot Table
-     * */
+
     public void fillBean(@NotNull String rowsFieldName) {
         setRowsFieldName(rowsFieldName);
         setColumnsFieldName("DefaultName");
         setRowsNames(findUniqueValuesOfField(rowsFieldName));
         setColumnsNames(List.of("DefaultColumnName"));
         setPivotTable(new ArrayList<>());
-    }
+    }*/
 
     /*public void setPivotTableWithSingleColumn(@NotNull String rowsFieldName) {
         fillBean(rowsFieldName);
@@ -87,7 +83,7 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
         }
     }*/
 
-    public String getRowsFieldName() {
+/*    public String getRowsFieldName() {
         return rowsFieldName;
     }
 
@@ -126,7 +122,7 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
 
     public void setPivotTable(List<ElementTaxPivotTable> pivotTable) {
         this.pivotTable = pivotTable;
-    }
+    }*/
 
 /*
     private void addOneColumnToPivotTable(List<Long> valuesColumn) {

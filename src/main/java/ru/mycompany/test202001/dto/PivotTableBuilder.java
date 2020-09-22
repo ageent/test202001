@@ -101,6 +101,14 @@ public class PivotTableBuilder {
         this.rowsNames = rowsNames;
     }
 
+    public List<ElementTaxPivotTable> getTable() {
+        return table;
+    }
+
+    public void setTable(List<ElementTaxPivotTable> table) {
+        this.table = table;
+    }
+
     @Override
     public String toString() {
         return "PivotTableBuilder{" +
