@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 public class PivotTableBuilder {
 
-    /*Field name in the entity of DB. This field keep values for the aggregation*/
+    /*Field name in an entity of a DB. This field keep values for the aggregation*/
     private String valuesFieldName;
     /*Field name of rows of pivot table*/
     private String rowsFieldName;
