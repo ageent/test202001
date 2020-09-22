@@ -1,5 +1,6 @@
 package ru.mycompany.test202001.controllers;
 
+import org.springframework.lang.Nullable;
 import ru.mycompany.test202001.dto.ElementTaxPivotTable;
 import ru.mycompany.test202001.dto.PivotTableBuilder;
 import ru.mycompany.test202001.repositories.PivotTableRepository;
@@ -33,28 +34,31 @@ public interface PivotTableController {
             @NotNull PivotTableRepository repository
     ) {
         List<Long> valuesColumn = repository.getPivotTableColumn(builder);
-        addOneColumnToPivotTable(valuesColumn, builder);
+        addOneColumnToPivotTable(null, valuesColumn, builder);
     }
 
-    private void addOneColumnToPivotTable(@NotNull List<Long> valuesColumn,
+    private void setPivotTableWithSeveralColumns(@NotNull PivotTableBuilder builder,
+                                                 @NotNull PivotTableRepository repository) {
+        for (String colName : builder.getColumnsNames()) {
+            List<Long> valuesColumn = repository.getPivotTableColumn(colName, builder);
+            addOneColumnToPivotTable(colName, valuesColumn, builder);
+        }
+    }
+
+    private void addOneColumnToPivotTable(@Nullable String columnName,
+                                          @NotNull List<Long> valuesColumn,
                                           @NotNull PivotTableBuilder builder) {
-        String colName = "Sum Value";
+        if (columnName == null) {
+            columnName = "Sum Value";
+        }
 
         for (int rowNum = 0; rowNum < builder.getRowsNames().size(); rowNum++) {
             long elVal = valuesColumn.get(rowNum);
             String rowName = builder.getRowsNames().get(rowNum);
             ElementTaxPivotTable tableElement =
-                    new ElementTaxPivotTable(colName, rowName, elVal);
+                    new ElementTaxPivotTable(columnName, rowName, elVal);
 
             builder.getTable().add(tableElement);
-        }
-    }
-
-    private void setPivotTableWithSeveralColumns(@NotNull PivotTableBuilder builder,
-                                                 @NotNull PivotTableRepository repository) {
-        for (String colName : columnsNames) {
-            List<Long> valuesColumn = getPivotTableSumField(colName);
-            addOneColumnToPivotTable(valuesColumn);
         }
     }
 }
