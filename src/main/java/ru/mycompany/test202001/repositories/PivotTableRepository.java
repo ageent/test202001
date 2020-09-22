@@ -14,7 +14,7 @@ public interface PivotTableRepository {
     List<String> findUniqueValuesOfField(String fieldName);
 
     List<Long> getPivotTableColumn(String columnName,
-                                          @NotNull PivotTableBuilder builder);
+                                   @NotNull PivotTableBuilder builder);
 
     List<Long> getPivotTableColumn(@NotNull PivotTableBuilder builder);
 }

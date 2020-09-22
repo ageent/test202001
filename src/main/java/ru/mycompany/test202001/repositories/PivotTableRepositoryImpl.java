@@ -31,6 +31,7 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
 
     @Override
     public List<String> findUniqueValuesOfField(String fieldName) {
+//        TODO: TAX -> Class<?>
         final String strQuery = "select " + fieldName
                 + " from Tax group by " + fieldName;
         TypedQuery<String> query = entityManager.createQuery(strQuery, String.class);
