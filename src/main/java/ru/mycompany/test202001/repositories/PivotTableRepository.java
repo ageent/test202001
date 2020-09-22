@@ -3,6 +3,9 @@ package ru.mycompany.test202001.repositories;
 import java.util.List;
 
 import ru.mycompany.test202001.dto.ElementTaxPivotTable;
+import ru.mycompany.test202001.dto.PivotTableBuilder;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Eugene Chernov
@@ -10,7 +13,8 @@ import ru.mycompany.test202001.dto.ElementTaxPivotTable;
 public interface PivotTableRepository {
     List<String> findUniqueValuesOfField(String fieldName);
 
-    void setPivotTable(String rowsFieldName, String columnsFieldName);
+    List<Long> getPivotTableColumn(String columnName,
+                                          @NotNull PivotTableBuilder builder);
 
-    List<ElementTaxPivotTable> getPivotTable();
+    List<Long> getPivotTableColumn(@NotNull PivotTableBuilder builder);
 }

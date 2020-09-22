@@ -1,6 +1,7 @@
 package ru.mycompany.test202001.controllers;
 
 import org.springframework.lang.Nullable;
+import ru.mycompany.test202001.domain.Tax;
 import ru.mycompany.test202001.dto.ElementTaxPivotTable;
 import ru.mycompany.test202001.dto.PivotTableBuilder;
 import ru.mycompany.test202001.repositories.PivotTableRepository;
@@ -29,7 +30,7 @@ public interface PivotTableController {
 
     private void setPivotTableWithSingleColumn(@NotNull PivotTableBuilder builder,
                                                @NotNull PivotTableRepository repository) {
-        addOneColumnToPivotTable(repository.getPivotTableSumField());
+        addOneColumnToPivotTable(repository.getPivotTableColumn(builder));
     }
 
     private void addOneColumnToPivotTable(List<Long> valuesColumn) {

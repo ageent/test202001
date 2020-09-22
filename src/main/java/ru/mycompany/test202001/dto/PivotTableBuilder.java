@@ -12,7 +12,9 @@ import java.util.Objects;
  */
 public class PivotTableBuilder {
 
-    /*Field name in an entity of a DB. This field keep values for the aggregation*/
+    /*Entity is a class of an entity of a DB*/
+    private Class<?> entity;
+    /*Field name of an entity of a DB. This field keep values for the aggregation*/
     private String valuesFieldName;
     /*Field name of rows of pivot table*/
     private String rowsFieldName;
@@ -24,16 +26,20 @@ public class PivotTableBuilder {
             List.of(new ElementTaxPivotTable("DefaultName", "DefaultName", -1L));
 
     public PivotTableBuilder(@NotNull String rowsFieldName,
-                             @NotNull String valuesFieldName) {
+                             @NotNull String valuesFieldName,
+                             @NotNull Class<?> entity) {
         this.rowsFieldName = rowsFieldName;
         this.valuesFieldName = valuesFieldName;
+        this.entity = entity;
     }
 
     public PivotTableBuilder(@NotNull String rowsFieldName,
                              @NotNull String valuesFieldName,
-                             @Nullable String columnsFieldName) {
+                             @Nullable String columnsFieldName,
+                             @NotNull Class<?> entity) {
         this.rowsFieldName = rowsFieldName;
         this.valuesFieldName = valuesFieldName;
+        this.entity = entity;
         if (columnsFieldName != null) {
             this.columnsFieldName = columnsFieldName;
         }
@@ -45,6 +51,14 @@ public class PivotTableBuilder {
 
     public void setRowsNames(@NotNull PivotTableRepository repository) {
         this.columnsNames = repository.findUniqueValuesOfField(rowsFieldName);
+    }
+
+    public Class<?> getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Class<?> entity) {
+        this.entity = entity;
     }
 
     public String getValuesFieldName() {

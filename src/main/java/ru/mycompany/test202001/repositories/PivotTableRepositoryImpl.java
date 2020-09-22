@@ -145,14 +145,12 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
 
     /**
      * @param columnName is column name of pivot table.
-     * @param entity is a class of an entity of a DB
      * */
     public List<Long> getPivotTableColumn(String columnName,
-                                          @NotNull PivotTableBuilder builder,
-                                          Class<?> entity) {
+                                          @NotNull PivotTableBuilder builder) {
         final String strQuery = "select sum(case when " + builder.getColumnsFieldName()
                 + " = '" + columnName + "' then " + builder.getValuesFieldName()
-                + " end) from " + entity.getName() + " group by "
+                + " end) from " + builder.getEntity().getName() + " group by "
                 + builder.getRowsFieldName();
         TypedQuery<Long> query = entityManager.createQuery(strQuery, Long.class);
 
@@ -161,9 +159,10 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
         return res;
     }
 
-    private List<Long> getPivotTableColumn(@NotNull PivotTableBuilder builder, Class<?> entity) {
+    public List<Long> getPivotTableColumn(@NotNull PivotTableBuilder builder) {
         final String strQuery = "select sum(" + builder.getValuesFieldName()
-                + ") from " + entity.getName() + " group by " + builder.getRowsFieldName();
+                + ") from " + builder.getEntity().getName() + " group by "
+                + builder.getRowsFieldName();
         TypedQuery<Long> query = entityManager.createQuery(strQuery, Long.class);
 
         List<Long> res = query.getResultList();
