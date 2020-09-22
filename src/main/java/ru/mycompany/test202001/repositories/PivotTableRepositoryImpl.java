@@ -70,7 +70,7 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
         setPivotTable(new ArrayList<>());
     }
 
-    public void setPivotTableWithSingleColumn(@NotNull String rowsFieldName) {
+    /*public void setPivotTableWithSingleColumn(@NotNull String rowsFieldName) {
         fillBean(rowsFieldName);
 
         addOneColumnToPivotTable(getPivotTableSumField());
@@ -84,7 +84,7 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
             List<Long> valuesColumn = getPivotTableSumField(colName);
             addOneColumnToPivotTable(valuesColumn);
         }
-    }
+    }*/
 
     public String getRowsFieldName() {
         return rowsFieldName;
