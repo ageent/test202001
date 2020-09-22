@@ -13,24 +13,26 @@ import java.util.List;
 public interface PivotTableController {
 
     default void getPivotTable(@NotNull PivotTableBuilder builder,
-                               @NotNull PivotTableRepository repository) {
-        if (columnsFieldName == null || columnsFieldName.equals(rowsFieldName)) {
-            setPivotTableWithSingleColumn(rowsFieldName);
+                               @NotNull PivotTableRepository repository) throws IllegalArgumentException {
+        if (builder.getRowsFieldName().equals("DefaultName")) {
+            throw new IllegalArgumentException("Empty PivotTableBuilder.");
+        }
+        builder.setRowsNames(repository);
+
+        if (builder.getColumnsFieldName().equals("DefaultName")
+                || builder.getColumnsFieldName().equals(builder.getRowsFieldName())) {
+            setPivotTableWithSingleColumn(builder);
             return;
         }
-        setPivotTableWithSeveralColumns(rowsFieldName, columnsFieldName);
+        builder.setColumnsNames(repository);
+        setPivotTableWithSeveralColumns(builder);
     }
 
-    private void setPivotTableWithSingleColumn(@NotNull String rowsFieldName) {
-        fillBean(rowsFieldName);
-
+    private void setPivotTableWithSingleColumn(@NotNull PivotTableBuilder builder) {
         addOneColumnToPivotTable(getPivotTableSumField());
     }
 
-    private void setPivotTableWithSeveralColumns(@NotNull String rowsFieldName,
-                                                @NotNull String columnsFieldName) {
-        fillBean(rowsFieldName, columnsFieldName);
-
+    private void setPivotTableWithSeveralColumns(@NotNull PivotTableBuilder builder) {
         for (String colName : columnsNames) {
             List<Long> valuesColumn = getPivotTableSumField(colName);
             addOneColumnToPivotTable(valuesColumn);
