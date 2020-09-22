@@ -1,6 +1,5 @@
 package ru.mycompany.test202001.repositories;
 
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import ru.mycompany.test202001.dto.ElementTaxPivotTable;
 
@@ -15,7 +14,7 @@ import java.util.List;
  * @author Eugene Chernov
  */
 @Repository
-public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepositoryForPivotTable {
+public class PivotTableRepositoryImpl implements PivotTableRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -25,7 +24,7 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
     private List<String> rowsNames = List.of("DefaultRowName");
     private List<ElementTaxPivotTable> pivotTable = new ArrayList<>();
 
-    public CustomTaxRepositoryForPivotTableImpl(EntityManager entityManager) {
+    public PivotTableRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
@@ -37,6 +36,7 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
         return query.getResultList();
     }
 
+/*
     @Override
     public void setPivotTable(@NotNull String rowsFieldName,
                               @Nullable String columnsFieldName) {
@@ -46,6 +46,7 @@ public class CustomTaxRepositoryForPivotTableImpl implements CustomTaxRepository
         }
         setPivotTableWithSeveralColumns(rowsFieldName, columnsFieldName);
     }
+*/
 
     /**
      * Sets all fields and cleans Pivot Table

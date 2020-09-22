@@ -6,7 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import ru.mycompany.test202001.repositories.CustomTaxRepositoryForPivotTable;
+import ru.mycompany.test202001.repositories.PivotTableRepository;
 import ru.mycompany.test202001.dto.ElementTaxPivotTable;
 
 import java.util.List;
@@ -17,10 +17,10 @@ import java.util.List;
 @RestController
 public class TaxController {
 
-    private final CustomTaxRepositoryForPivotTable pivotTableRepository;
+    private final PivotTableRepository pivotTableRepository;
 
     @Autowired
-    public TaxController(CustomTaxRepositoryForPivotTable pivotTableRepository) {
+    public TaxController(PivotTableRepository pivotTableRepository) {
         this.pivotTableRepository = pivotTableRepository;
     }
 
