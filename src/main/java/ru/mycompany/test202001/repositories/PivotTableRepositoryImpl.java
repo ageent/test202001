@@ -2,6 +2,7 @@ package ru.mycompany.test202001.repositories;
 
 import org.springframework.stereotype.Repository;
 import ru.mycompany.test202001.dto.ElementTaxPivotTable;
+import ru.mycompany.test202001.dto.PivotTableBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,11 +19,11 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
-    private String rowsFieldName = "DefaultName";       // Field name of rows of pivot table
+    /*private String rowsFieldName = "DefaultName";       // Field name of rows of pivot table
     private String columnsFieldName = "DefaultName";    // Field name of columns of pivot table
     private List<String> columnsNames = List.of("DefaultColumnName");
     private List<String> rowsNames = List.of("DefaultRowName");
-    private List<ElementTaxPivotTable> pivotTable = new ArrayList<>();
+    private List<ElementTaxPivotTable> pivotTable = new ArrayList<>();*/
 
     public PivotTableRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -127,6 +128,7 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
         this.pivotTable = pivotTable;
     }
 
+/*
     private void addOneColumnToPivotTable(List<Long> valuesColumn) {
         String colName = "V";
 
@@ -139,17 +141,19 @@ public class PivotTableRepositoryImpl implements PivotTableRepository {
             pivotTable.add(elTable);
         }
     }
+*/
 
-    /*
-     * param columnNumber is column name of pivot table.
+    /**
+     * @param columnName is column name of pivot table.
      * */
-    private List<Long> getPivotTableSumField(String columnName) {
-        final String strQuery = "select sum(case when " + columnsFieldName
-                + " = '" + columnName + "' then v end) from Tax group by " + rowsFieldName;
+    public List<Long> getPivotTableColumn(String columnName, @NotNull PivotTableBuilder builder) {
+        final String strQuery = "select sum(case when " + builder.getColumnsFieldName()
+                + " = '" + columnName + "' then " + builder.getValuesFieldName()
+                + " end) from Tax group by " + builder.getRowsFieldName();
         TypedQuery<Long> query = entityManager.createQuery(strQuery, Long.class);
 
         List<Long> res = query.getResultList();
-        assert res.size() == rowsNames.size();
+        assert res.size() == builder.getRowsNames().size();
         return res;
     }
 

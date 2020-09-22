@@ -12,21 +12,28 @@ import java.util.Objects;
  */
 public class PivotTableBuilder {
 
-    private String rowsFieldName = "DefaultName";       // Field name of rows of pivot table
-    private String columnsFieldName = "DefaultName";    // Field name of columns of pivot table
+    /*Field name in the entity of DB. This field keep values for the aggregation*/
+    private String valuesFieldName;
+    /*Field name of rows of pivot table*/
+    private String rowsFieldName;
+    /*Field name of columns of pivot table*/
+    private String columnsFieldName = "DefaultName";
     private List<String> columnsNames = List.of("DefaultColumnName");
     private List<String> rowsNames = List.of("DefaultRowName");
     private List<ElementTaxPivotTable> table =
             List.of(new ElementTaxPivotTable("DefaultName", "DefaultName", -1L));
 
-    public PivotTableBuilder() {}
-
-    public PivotTableBuilder(@NotNull String rowsFieldName) {
+    public PivotTableBuilder(@NotNull String rowsFieldName,
+                             @NotNull String valuesFieldName) {
         this.rowsFieldName = rowsFieldName;
+        this.valuesFieldName = valuesFieldName;
     }
 
-    public PivotTableBuilder(@NotNull String rowsFieldName, @Nullable String columnsFieldName) {
+    public PivotTableBuilder(@NotNull String rowsFieldName,
+                             @NotNull String valuesFieldName,
+                             @Nullable String columnsFieldName) {
         this.rowsFieldName = rowsFieldName;
+        this.valuesFieldName = valuesFieldName;
         if (columnsFieldName != null) {
             this.columnsFieldName = columnsFieldName;
         }
@@ -38,6 +45,14 @@ public class PivotTableBuilder {
 
     public void setRowsNames(@NotNull PivotTableRepository repository) {
         this.columnsNames = repository.findUniqueValuesOfField(rowsFieldName);
+    }
+
+    public String getValuesFieldName() {
+        return valuesFieldName;
+    }
+
+    public void setValuesFieldName(String valuesFieldName) {
+        this.valuesFieldName = valuesFieldName;
     }
 
     public String getRowsFieldName() {
