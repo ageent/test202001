@@ -11,7 +11,8 @@ import javax.validation.constraints.NotNull;
  * @author Eugene Chernov
  */
 public interface PivotTableRepository {
-    List<String> findUniqueValuesOfField(String fieldName);
+    List<String> findUniqueValuesOfField(String fieldName,
+                                         @NotNull PivotTableBuilder builder);
 
     List<Long> getPivotTableColumn(String columnName,
                                    @NotNull PivotTableBuilder builder);

@@ -4,6 +4,7 @@ import org.springframework.lang.Nullable;
 import ru.mycompany.test202001.repositories.PivotTableRepository;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,8 +23,7 @@ public class PivotTableBuilder {
     private String columnsFieldName = "DefaultName";
     private List<String> columnsNames = List.of("DefaultColumnName");
     private List<String> rowsNames = List.of("DefaultRowName");
-    private List<ElementTaxPivotTable> table =
-            List.of(new ElementTaxPivotTable("DefaultName", "DefaultName", -1L));
+    private List<ElementTaxPivotTable> table = new ArrayList<>();
 
     public PivotTableBuilder(@NotNull String rowsFieldName,
                              @NotNull String valuesFieldName,
@@ -34,8 +34,8 @@ public class PivotTableBuilder {
     }
 
     public PivotTableBuilder(@NotNull String rowsFieldName,
-                             @NotNull String valuesFieldName,
                              @Nullable String columnsFieldName,
+                             @NotNull String valuesFieldName,
                              @NotNull Class<?> entity) {
         this.rowsFieldName = rowsFieldName;
         this.valuesFieldName = valuesFieldName;
@@ -46,11 +46,11 @@ public class PivotTableBuilder {
     }
 
     public void setColumnsNames(@NotNull PivotTableRepository repository) {
-        this.columnsNames = repository.findUniqueValuesOfField(columnsFieldName);
+        this.columnsNames = repository.findUniqueValuesOfField(columnsFieldName, this);
     }
 
     public void setRowsNames(@NotNull PivotTableRepository repository) {
-        this.columnsNames = repository.findUniqueValuesOfField(rowsFieldName);
+        this.rowsNames = repository.findUniqueValuesOfField(rowsFieldName, this);
     }
 
     public Class<?> getEntity() {
@@ -122,18 +122,22 @@ public class PivotTableBuilder {
         if (this == o) return true;
         if (!(o instanceof PivotTableBuilder)) return false;
 
-        PivotTableBuilder that = (PivotTableBuilder) o;
+        PivotTableBuilder builder = (PivotTableBuilder) o;
 
-        if (!Objects.equals(rowsFieldName, that.rowsFieldName)) return false;
-        if (!Objects.equals(columnsFieldName, that.columnsFieldName)) return false;
-        if (!Objects.equals(columnsNames, that.columnsNames)) return false;
-        if (!Objects.equals(rowsNames, that.rowsNames)) return false;
-        return Objects.equals(table, that.table);
+        if (!Objects.equals(entity, builder.entity)) return false;
+        if (!Objects.equals(valuesFieldName, builder.valuesFieldName)) return false;
+        if (!Objects.equals(rowsFieldName, builder.rowsFieldName)) return false;
+        if (!Objects.equals(columnsFieldName, builder.columnsFieldName)) return false;
+        if (!Objects.equals(columnsNames, builder.columnsNames)) return false;
+        if (!Objects.equals(rowsNames, builder.rowsNames)) return false;
+        return Objects.equals(table, builder.table);
     }
 
     @Override
     public int hashCode() {
-        int result = rowsFieldName != null ? rowsFieldName.hashCode() : 0;
+        int result = entity != null ? entity.hashCode() : 0;
+        result = 31 * result + (valuesFieldName != null ? valuesFieldName.hashCode() : 0);
+        result = 31 * result + (rowsFieldName != null ? rowsFieldName.hashCode() : 0);
         result = 31 * result + (columnsFieldName != null ? columnsFieldName.hashCode() : 0);
         result = 31 * result + (columnsNames != null ? columnsNames.hashCode() : 0);
         result = 31 * result + (rowsNames != null ? rowsNames.hashCode() : 0);

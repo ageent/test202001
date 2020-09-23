@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.mycompany.test202001.controllers.TaxController;
+import ru.mycompany.test202001.controllers.tax.TaxController;
 
 /**
  * @author Eugene Chernov
@@ -16,7 +16,8 @@ public class RootAddressExceptionHandler extends ResponseEntityExceptionHandler 
 
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
     protected ResponseEntity<RequestIllegalParamException> handleInvalidDataAccessApiUsageException() {
-        String message = "Required parameter 'row' and optional parameter 'col' " +
+        String message = "Internal Server Error. Try the following: " +
+                "Required parameter 'row' and optional parameter 'col' " +
                 "can have the following values a, b, c, d, y.";
         return new ResponseEntity<>(new RequestIllegalParamException(message),
                 HttpStatus.INTERNAL_SERVER_ERROR);
