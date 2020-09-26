@@ -52,8 +52,11 @@ public interface PivotTableController {
                                           @NotNull List<Long> valuesColumn,
                                           @NotNull PivotTableBuilder builder) {
         for (int rowNum = 0; rowNum < builder.getRowsNames().size(); rowNum++) {
-            long elVal = valuesColumn.get(rowNum);
             String rowName = builder.getRowsNames().get(rowNum);
+            Long elVal = valuesColumn.get(rowNum);
+            if (elVal == null) {
+                elVal = 0L;
+            }
             ElementTaxPivotTable tableElement =
                     new ElementTaxPivotTable(columnName, rowName, elVal);
 
